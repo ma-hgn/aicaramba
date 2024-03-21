@@ -140,26 +140,27 @@ where
     }
 
     pub fn map<F>(&self, f: F) -> Mat<T>
-        where F: FnMut(T) -> T
+    where
+        F: FnMut(T) -> T,
     {
         Mat {
-            rows: self.rows, cols: self.cols,
-            data: self.data.clone()
-                .into_iter()
-                .map(f)
-                .collect()
+            rows: self.rows,
+            cols: self.cols,
+            data: self.data.clone().into_iter().map(f).collect(),
         }
     }
 }
 
 pub trait Collect<T>
-    where T: MatElem,
+where
+    T: MatElem,
 {
     fn collect_mat(self, rows: usize, cols: usize) -> Mat<T>;
 }
 
 impl<T> Collect<T> for T
-where T: MatElem + std::iter::IntoIterator<Item = T>
+where
+    T: MatElem + std::iter::IntoIterator<Item = T>,
 {
     fn collect_mat(self, rows: usize, cols: usize) -> Mat<T> {
         let data = self.into_iter().collect::<Vec<T>>();
